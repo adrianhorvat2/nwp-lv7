@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Evidencija projekata</h1>
+        </header>
+
+        <main>
+            <div class="auth-container">
+                <h2>
+                    <%= title %>
+                </h2>
+
+                <% if (error) { %>
+                    <div class="error-message">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+                        <form method="POST" action="/users/login" class="auth-form">
+                            <div class="form-group">
+                                <label for="email">Email adresa *</label>
+                                <input type="email" id="email" name="email" required autofocus>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Lozinka *</label>
+                                <input type="password" id="password" name="password" required>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Prijavi se</button>
+                            </div>
+                        </form>
+
+                        <div class="auth-link">
+                            Nemaš račun? <a href="/users/register">Registriraj se</a>
+                        </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

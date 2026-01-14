@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "1768418238389",
+    "naziv": "Novi",
+    "opis": "bla bla bla",
+    "cijena": 5000,
+    "obavljeniPoslovi": "",
+    "datumPocetka": "2026-01-15",
+    "datumZavrsetka": "2026-01-30",
+    "leaderId": "1768418210049",
+    "teamMembers": [
+      "1768418148959"
+    ],
+    "archived": false
+  }
+]

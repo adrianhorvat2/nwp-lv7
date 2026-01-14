@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Evidencija projekata</h1>
+            <nav>
+                <a href="/projects">Svi projekti</a>
+                <a href="/projects/my-projects">Moji projekti</a>
+                <a href="/projects/my-memberships">Moje članstvo</a>
+                <a href="/projects/archive">Arhiva</a>
+                <a href="/projects/new" class="btn-primary">+ Novi projekt</a>
+                <% if (user) { %>
+                    <div class="user-info">
+                        <strong>
+                            <%= user.name %>
+                        </strong> | <a href="/users/logout">Odjava</a>
+                    </div>
+                    <% } %>
+            </nav>
+        </header>
+
+        <main>
+            <h2>
+                <%= title %>
+            </h2>
+
+            <% if (projects.length===0) { %>
+                <p class="empty-state">Nemate projekte gdje ste voditelj. Kreirajte novi projekt!</p>
+                <% } else { %>
+                    <div class="projects-grid">
+                        <% projects.forEach(function(project) { %>
+                            <div class="project-card">
+                                <h3>
+                                    <%= project.naziv %>
+                                </h3>
+                                <p class="project-price">
+                                    <%= project.cijena %> €
+                                </p>
+                                <p class="project-dates">
+                                    <%= new Date(project.datumPocetka).toLocaleDateString('hr-HR') %> -
+                                        <%= new Date(project.datumZavrsetka).toLocaleDateString('hr-HR') %>
+                                </p>
+                                <p class="project-description">
+                                    <%= project.opis.substring(0, 100) %>
+                                        <%= project.opis.length> 100 ? '...' : '' %>
+                                </p>
+
+                                <% if (project.teamMembers && project.teamMembers.length> 0) { %>
+                                    <div class="team-count">
+                                        <span>👥 <%= project.teamMembers.length %> član<%=
+                                                    project.teamMembers.length===1 ? '' : (project.teamMembers.length <
+                                                    5 ? 'a' : 'ova' ) %></span>
+                                    </div>
+                                    <% } %>
+
+                                        <div class="card-actions">
+                                            <a href="/projects/<%= project.id %>" class="btn-secondary">Detalji</a>
+                                            <a href="/projects/<%= project.id %>/edit" class="btn-secondary">Uredi</a>
+                                        </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                    <% } %>
+        </main>
+    </div>
+</body>
+
+</html>

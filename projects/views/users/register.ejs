@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Evidencija projekata</h1>
+        </header>
+
+        <main>
+            <div class="auth-container">
+                <h2>
+                    <%= title %>
+                </h2>
+
+                <% if (error) { %>
+                    <div class="error-message">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+                        <form method="POST" action="/users/register" class="auth-form">
+                            <div class="form-group">
+                                <label for="name">Ime i prezime *</label>
+                                <input type="text" id="name" name="name" required autofocus>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email adresa *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Lozinka *</label>
+                                <input type="password" id="password" name="password" required minlength="6">
+                                <small>Minimalno 6 znakova</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Potvrdi lozinku *</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required
+                                    minlength="6">
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Registriraj se</button>
+                            </div>
+                        </form>
+
+                        <div class="auth-link">
+                            Već imaš račun? <a href="/users/login">Prijavi se</a>
+                        </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

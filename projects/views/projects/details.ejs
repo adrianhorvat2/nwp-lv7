@@ -1,78 +1,140 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title><%= title %></title>
+  <title>
+    <%= title %>
+  </title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
+
 <body>
   <div class="container">
     <header>
       <h1>Evidencija projekata</h1>
       <nav>
         <a href="/projects">Svi projekti</a>
+        <a href="/projects/my-projects">Moji projekti</a>
+        <a href="/projects/my-memberships">Moje članstvo</a>
+        <a href="/projects/archive">Arhiva</a>
         <a href="/projects/new" class="btn-primary">+ Novi projekt</a>
+        <% if (user) { %>
+          <div class="user-info">
+            <strong>
+              <%= user.name %>
+            </strong> | <a href="/users/logout">Odjava</a>
+          </div>
+          <% } %>
       </nav>
     </header>
 
     <main>
       <div class="details-header">
-        <h2><%= project.naziv %></h2>
+        <h2>
+          <%= project.naziv %>
+            <% if (project.archived) { %>
+              <span class="archived-badge">ARHIVIRANO</span>
+              <% } %>
+        </h2>
         <div class="details-actions">
-          <a href="/projects/<%= project.id %>/edit" class="btn-primary">Uredi</a>
-          <form method="POST" action="/projects/<%= project.id %>/delete" style="display: inline;">
-            <button type="submit" class="btn-danger" onclick="return confirm('Jeste li sigurni da želite obrisati ovaj projekt?')">Obriši</button>
-          </form>
+          <% if (isLeader) { %>
+            <a href="/projects/<%= project.id %>/edit" class="btn-primary">Uredi</a>
+            <form method="POST" action="/projects/<%= project.id %>/archive" style="display: inline;">
+              <button type="submit" class="btn-secondary">
+                <%= project.archived ? 'Vrati iz arhive' : 'Arhiviraj' %>
+              </button>
+            </form>
+            <form method="POST" action="/projects/<%= project.id %>/delete" style="display: inline;">
+              <button type="submit" class="btn-danger"
+                onclick="return confirm('Jeste li sigurni da želite obrisati ovaj projekt?')">Obriši</button>
+            </form>
+            <% } %>
         </div>
       </div>
 
       <div class="details-card">
         <div class="details-section">
           <h3>Informacije o projektu</h3>
-          
+
+          <div class="detail-item">
+            <span class="detail-label">Voditelj:</span>
+            <span class="detail-value">
+              <%= leader ? leader.name : 'Nepoznato' %> <span class="role-badge leader">VODITELJ</span>
+            </span>
+          </div>
+
           <div class="detail-item">
             <span class="detail-label">Cijena:</span>
-            <span class="detail-value"><%= project.cijena %> €</span>
+            <span class="detail-value">
+              <%= project.cijena %> €
+            </span>
           </div>
 
           <div class="detail-item">
             <span class="detail-label">Datum početka:</span>
-            <span class="detail-value"><%= new Date(project.datumPocetka).toLocaleDateString('hr-HR') %></span>
+            <span class="detail-value">
+              <%= new Date(project.datumPocetka).toLocaleDateString('hr-HR') %>
+            </span>
           </div>
 
           <div class="detail-item">
             <span class="detail-label">Datum završetka:</span>
-            <span class="detail-value"><%= new Date(project.datumZavrsetka).toLocaleDateString('hr-HR') %></span>
+            <span class="detail-value">
+              <%= new Date(project.datumZavrsetka).toLocaleDateString('hr-HR') %>
+            </span>
           </div>
         </div>
 
         <div class="details-section">
           <h3>Opis</h3>
-          <p><%= project.opis %></p>
+          <p>
+            <%= project.opis %>
+          </p>
         </div>
 
         <% if (project.obavljeniPoslovi) { %>
-        <div class="details-section">
-          <h3>Obavljeni poslovi</h3>
-          <p><%= project.obavljeniPoslovi %></p>
+          <div class="details-section">
+            <h3>Obavljeni poslovi</h3>
+            <p>
+              <%= project.obavljeniPoslovi %>
+            </p>
+          </div>
+          <% } %>
+
+            <% if (teamMembers && teamMembers.length> 0) { %>
+              <div class="details-section">
+                <h3>Članovi tima (<%= teamMembers.length %>)</h3>
+                <ul class="team-list">
+                  <% teamMembers.forEach(function(member) { %>
+                    <li>
+                      <%= member.name %> (<%= member.email %>)
+                    </li>
+                    <% }); %>
+                </ul>
+              </div>
+              <% } %>
+      </div>
+
+      <!-- Member-only section for updating completed work -->
+      <% if (isMember && !isLeader) { %>
+        <div class="member-section">
+          <h3>Ažuriraj obavljene poslove (član tima)</h3>
+          <form method="POST" action="/projects/<%= project.id %>/update-work">
+            <div class="form-group">
+              <label for="obavljeniPoslovi">Obavljeni poslovi</label>
+              <textarea id="obavljeniPoslovi" name="obavljeniPoslovi"
+                rows="4"><%= project.obavljeniPoslovi || '' %></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Spremi</button>
+          </form>
         </div>
         <% } %>
 
-        <% if (project.teamMembers && project.teamMembers.length > 0) { %>
-        <div class="details-section">
-          <h3>Članovi tima (<%= project.teamMembers.length %>)</h3>
-          <ul class="team-list">
-            <% project.teamMembers.forEach(function(member) { %>
-              <li><%= member %></li>
-            <% }); %>
-          </ul>
-        </div>
-        <% } %>
-      </div>
-
-      <div class="back-link">
-        <a href="/projects">← Povratak na sve projekte</a>
-      </div>
+          <div class="back-link">
+            <a href="/projects">← Povratak na sve projekte</a>
+          </div>
     </main>
   </div>
 </body>
+
 </html>
