@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Evidencija projekata</h1>
+      <nav>
+        <a href="/projects">Svi projekti</a>
+        <a href="/projects/new" class="btn-primary">+ Novi projekt</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="details-header">
+        <h2><%= project.naziv %></h2>
+        <div class="details-actions">
+          <a href="/projects/<%= project.id %>/edit" class="btn-primary">Uredi</a>
+          <form method="POST" action="/projects/<%= project.id %>/delete" style="display: inline;">
+            <button type="submit" class="btn-danger" onclick="return confirm('Jeste li sigurni da želite obrisati ovaj projekt?')">Obriši</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="details-card">
+        <div class="details-section">
+          <h3>Informacije o projektu</h3>
+          
+          <div class="detail-item">
+            <span class="detail-label">Cijena:</span>
+            <span class="detail-value"><%= project.cijena %> €</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Datum početka:</span>
+            <span class="detail-value"><%= new Date(project.datumPocetka).toLocaleDateString('hr-HR') %></span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Datum završetka:</span>
+            <span class="detail-value"><%= new Date(project.datumZavrsetka).toLocaleDateString('hr-HR') %></span>
+          </div>
+        </div>
+
+        <div class="details-section">
+          <h3>Opis</h3>
+          <p><%= project.opis %></p>
+        </div>
+
+        <% if (project.obavljeniPoslovi) { %>
+        <div class="details-section">
+          <h3>Obavljeni poslovi</h3>
+          <p><%= project.obavljeniPoslovi %></p>
+        </div>
+        <% } %>
+
+        <% if (project.teamMembers && project.teamMembers.length > 0) { %>
+        <div class="details-section">
+          <h3>Članovi tima (<%= project.teamMembers.length %>)</h3>
+          <ul class="team-list">
+            <% project.teamMembers.forEach(function(member) { %>
+              <li><%= member %></li>
+            <% }); %>
+          </ul>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="back-link">
+        <a href="/projects">← Povratak na sve projekte</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
